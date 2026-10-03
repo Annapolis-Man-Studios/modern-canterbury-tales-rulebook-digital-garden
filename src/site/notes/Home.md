@@ -3,7 +3,7 @@ title: Home
 dg-publish: true
 dg-home: true
 tags:
-	- gardenEntry
+  - gardenEntry
 ---
 This is home! Welcome home!
 
