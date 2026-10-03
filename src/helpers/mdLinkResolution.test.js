@@ -82,6 +82,11 @@ describe("extractLinks with markdown-style links", () => {
     const links = extractLinks("[[wiki/concepts/feedback|Feedback]]");
     expect(links).toContain("wiki/concepts/feedback");
   });
+
+  it("extracts unaliased wikilinks", () => {
+    const links = extractLinks("[[This is a test]]");
+    expect(links).toContain("This is a test");
+  });
 });
 
 describe("convertMdHrefs", () => {

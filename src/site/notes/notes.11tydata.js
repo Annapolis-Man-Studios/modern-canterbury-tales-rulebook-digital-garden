@@ -1,4 +1,5 @@
 require("dotenv").config();
+const slugify = require("@sindresorhus/slugify");
 const settings = require("../../helpers/constants");
 const { pickNoteMetadata } = require("../../helpers/bases-engine/noteMetadata");
 const pluginLoader = require("../../helpers/pluginLoader");
@@ -23,7 +24,7 @@ module.exports = {
       if (data.tags.indexOf("gardenEntry") != -1) {
         return "/";
       }
-      return data.permalink || undefined;
+      return data.permalink || `/notes/${slugify(data.page.fileSlug)}/`;
     },
     basesNotes: (data) => {
       if (!data.collections || !data.collections.note) return [];

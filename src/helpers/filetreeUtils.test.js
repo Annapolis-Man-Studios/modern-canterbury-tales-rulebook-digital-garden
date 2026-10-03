@@ -14,6 +14,15 @@ function makeNote(filePathStem, data = {}) {
 
 describe("filetreeUtils", () => {
   describe("getFileTree without navigation ordering", () => {
+      it("uses the generated note URL when frontmatter has no permalink", () => {
+        const note = makeNote("/This is a test", { permalink: undefined });
+        note.url = "/notes/this-is-a-test/";
+
+        const tree = getFileTree({ collections: { note: [note] } });
+
+        expect(tree["This is a test.md"].permalink).toBe(note.url);
+      });
+
     it("sorts folders before files, then alphabetically", () => {
       const data = {
         collections: {

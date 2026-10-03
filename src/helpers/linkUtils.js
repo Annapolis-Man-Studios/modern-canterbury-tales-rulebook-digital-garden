@@ -1,6 +1,6 @@
 const path = require("path");
 
-const wikiLinkRegex = /\[\[(.*?\|.*?)\]\]/g;
+const wikiLinkRegex = /\[\[([^\]]+)\]\]/g;
 const internalLinkRegex = /href="\/(.*?)"/g;
 // Markdown-style links to .md files, e.g. [Feedback](../concepts/feedback.md).
 // Negative lookbehind excludes image embeds. Group 1 is the link target.
