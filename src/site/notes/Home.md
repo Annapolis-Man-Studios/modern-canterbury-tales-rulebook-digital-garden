@@ -6,3 +6,5 @@ tags:
 	- gardenEntry
 ---
 This is home! Welcome home!
+
+[[This is a test]]
