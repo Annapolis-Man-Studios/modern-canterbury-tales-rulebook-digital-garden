@@ -13,3 +13,7 @@ src/site/_includes/plugins/
 .cache
 _site/
 **/.DS_Store
+
+
+# Ignore any obsidian folder in any subdirectory, including the root
+**/.obsidian/*
