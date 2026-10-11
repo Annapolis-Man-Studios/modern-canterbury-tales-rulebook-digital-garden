@@ -2876,7 +2876,7 @@ iframe {
 }
 @media print {
   .theme-dark {
-    --highlight-mix-blend-mode: darken;
+    --highlight-mix-blend-mode: lighten;
   }
 }
 @font-face {

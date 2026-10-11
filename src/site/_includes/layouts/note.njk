@@ -57,7 +57,7 @@ permalink: "notes/{{ page.fileSlug | slugify }}/"
       {% for imp in dynamics.notes.beforeContent %}
         {% include imp %}
       {% endfor %}
-      {{ content | hideDataview | taggify | link | resolveMdLinks | safe}}
+      {{ content | hideDataview | taggify | linkImg | link | resolveMdLinks | safe}}
       {% set slotName = "common.afterContent" %}{% include "components/pluginSlot.njk" %}
       {% set slotName = "notes.afterContent" %}{% include "components/pluginSlot.njk" %}
       {% for imp in dynamics.common.afterContent %}

@@ -154,6 +154,21 @@ function getAnchorLink(filePath, linkTitle) {
   return `<a ${Object.keys(attributes).map(key => `${key}="${attributes[key]}"`).join(" ")}>${innerHTML}</a>`;
 }
 
+function getImageLink(filePath, linkTitle) {
+  const imagePath = filePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const alt = (linkTitle || "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
+  return `<img src="/img/${imagePath}" alt="${alt}" />`;
+}
+
 // Resolving a wikilink target reads and YAML-parses the target note's
 // frontmatter from disk. The same targets are linked from many notes (and the
 // same link is resolved again by the graph/backlink machinery), so cache per
@@ -169,6 +184,12 @@ function getAnchorAttributes(filePath, linkTitle) {
     anchorAttributesCache.set(cacheKey, cached);
   }
   return cached;
+}
+
+function isLocation(fileName) {
+  return fileName.startsWith("Towns")
+    || fileName.startsWith("Dungeons")
+    || fileName.startsWith("Terrains");
 }
 
 function computeAnchorAttributes(filePath, linkTitle) {
@@ -191,6 +212,14 @@ function computeAnchorAttributes(filePath, linkTitle) {
       fullPath = `${startPath}${fileName}`;
     } else {
       fullPath = `${startPath}${fileName}.md`;
+    }
+    if (fileName.includes("-")) {
+      const folderName = fileName.split("-")[0].trim();
+      if (isLocation(folderName)) {
+        fullPath = `${startPath}Locations/${folderName}/${fileName}.md`;  
+      } else {
+        fullPath = `${startPath}${folderName}/${fileName}.md`;
+      }
     }
     const file = fs.readFileSync(fullPath, "utf8");
     const frontMatter = matter(file, matterOptions);
@@ -467,6 +496,21 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addFilter("isoDate", function(date) {
     return date && date.toISOString();
+  });
+
+  eleventyConfig.addFilter("linkImg", function(str) {
+    return (
+      str &&
+      str.replace(/\!\[\[([^\]]+)\]\]/g, function(match, p1) {
+        //Check if it is an embedded excalidraw drawing or mathjax javascript
+        if (p1.indexOf("],[") > -1 || p1.indexOf('"$"') > -1) {
+          return match;
+        }
+        const [fileLink, linkTitle] = p1.split("|");
+
+        return getImageLink(fileLink, linkTitle);
+      })
+    );
   });
 
   eleventyConfig.addFilter("link", function(str) {
